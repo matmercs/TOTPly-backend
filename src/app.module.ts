@@ -4,8 +4,12 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { CryptoModule } from './crypto/crypto.module';
 import { TotpModule } from './totp/totp.module';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { GqlThrottlerGuard } from './common/gql-throttler.guard';
+import { ComplexityPlugin } from './graphql/complexity.plugin';
 
 @Module({
   imports: [
@@ -13,6 +17,14 @@ import { APP_GUARD } from '@nestjs/core';
       ttl: 60000,
       limit: 10,
     }]),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+      sortSchema: true,
+      playground: false,
+      path: '/graphql',
+      context: ({ req }) => ({ req }),
+    }),
     PrismaModule,
     CryptoModule,
     AuthModule,
@@ -22,8 +34,9 @@ import { APP_GUARD } from '@nestjs/core';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: GqlThrottlerGuard,
     },
+    ComplexityPlugin,
   ],
 })
 export class AppModule {}
