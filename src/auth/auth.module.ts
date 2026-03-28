@@ -5,6 +5,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { EmailModule } from '../email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtGuard } from './jwt.guard';
+import { AuthResolver } from '../graphql/resolvers/auth.resolver';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { JwtGuard } from './jwt.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtGuard],
+  providers: [AuthService, JwtGuard, AuthResolver],
   exports: [AuthService, JwtGuard, JwtModule],
 })
 export class AuthModule {}
