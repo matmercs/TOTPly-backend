@@ -29,7 +29,7 @@ import { EtagInterceptor } from './common/interceptors/etag.interceptor';
       driver: ApolloDriver,
       autoSchemaFile: true,
       sortSchema: true,
-      playground: false,
+      playground: true,
       csrfPrevention: false,
       path: '/graphql',
       context: ({ req }) => ({ req }),
