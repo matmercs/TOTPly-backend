@@ -30,6 +30,7 @@ import { EtagInterceptor } from './common/interceptors/etag.interceptor';
       autoSchemaFile: true,
       sortSchema: true,
       playground: false,
+      csrfPrevention: false,
       path: '/graphql',
       context: ({ req }) => ({ req }),
     }),
